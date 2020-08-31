@@ -26,13 +26,7 @@ EOF
 
 echo "Creating database and table..."
 mysql --user=root --password='@@{MYSQL_PASSWORD}@@' <<- "EOF"
-CREATE DATABASE IF NOT EXISTS @@{database_name}@@ ;
-CREATE TABLE IF NOT EXISTS @@{database_name}@@.@@{database_table}@@ ( \
-  id INT NOT NULL AUTO_INCREMENT , \
-  time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , \
-  message VARCHAR(80) NULL DEFAULT NULL , \
-  PRIMARY KEY (id)) \
-  ENGINE = InnoDB CHARSET=ascii COLLATE ascii_general_ci COMMENT = 'testing';
+CREATE DATABASE IF NOT EXISTS @@{DATABASE_NAME}@@ ;
 
 FLUSH PRIVILEGES;
 
