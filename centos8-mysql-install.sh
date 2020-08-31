@@ -15,8 +15,7 @@ sudo systemctl start mysqld
 sudo systemctl enable mysqld
 #&& sudo systemctl status mysqld.service
 
-# -*- Mysql secure installation
-echo "Altering root password..."
+echo "__ Altering database root password..."
 
 mysql --user=root --connect-expired-password \
   --password="$(sudo grep -oP 'temporary password(.*): \K(\S+)' /var/log/mysqld.log)" <<- EOF
