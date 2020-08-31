@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -ex
+
+sudo rm -rf /var/www/html/* || true
+sudo yum erase -y httpd php || true

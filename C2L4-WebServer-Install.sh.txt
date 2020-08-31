@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+set -ex
+
+echo "__ Updating OS..."
+# Tested on CentOS 8.2
+sudo yum -y -q update
+
+echo "__ Install httpd and php..."
+sudo yum install -y httpd
+sudo yum install -y php php-gd php-mbstring php-pdo php-mysqlnd
+
+echo "<IfModule mod_dir.c>
+        DirectoryIndex index.php index.html
+</IfModule>" | sudo tee /etc/httpd/conf.modules.d/dir.conf
+
+echo "<?php
+phpinfo();
+?>" | sudo tee /var/www/html/index.php
+
+sudo systemctl restart httpd &&
+  sudo systemctl enable httpd
+
+echo "__ Install simple web application..."
+sudo touch /var/www/html/index.php
+sudo chown @@{superuser.username}@@:@@{superuser.username}@@ /var/www/html/index.php
+cat > /var/www/html/index.php <<- "EOF"
+<html>
+<head>
+  <title>@@{calm_blueprint_name}@@</title>
+</head>
+<body>
+ <h1>Hostname: @@{name}@@ at @@{address}@@, replica: @@{calm_array_index}@@</h1>
+<?php
+
+try {
+  echo "<h3>Web docroot: $_SERVER['DOCUMENT_ROOT'], file: $_SERVER['SCRIPT_NAME']</h3>\n";
+}
+
+catch (PDOException $e) {
+  print "Error!: " . $e->getMessage() . "<br/>";
+  print phpinfo();
+  die();
+}
+?></body>
+</html>
+EOF

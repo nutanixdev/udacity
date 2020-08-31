@@ -20,13 +20,17 @@ echo "__ Altering database root password..."
 mysql --user=root --connect-expired-password \
   --password="$(sudo grep -oP 'temporary password(.*): \K(\S+)' /var/log/mysqld.log)" <<- EOF
 SET GLOBAL validate_password.policy=LOW;
+
 ALTER user 'root'@'localhost' IDENTIFIED BY '@@{MYSQL_PASSWORD}@@';
+
 FLUSH PRIVILEGES;
 EOF
 
 echo "Creating database and table..."
 mysql --user=root --password='@@{MYSQL_PASSWORD}@@' <<- "EOF"
 CREATE DATABASE IF NOT EXISTS @@{DATABASE_NAME}@@ ;
+
+GRANT ALL PRIVILEGES ON homestead.* TO '@@{DATABASE_NAME}@@'@'%' identified by 'secret';
 
 FLUSH PRIVILEGES;
 
