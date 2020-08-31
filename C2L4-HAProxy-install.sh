@@ -2,6 +2,7 @@
 set -ex
 
 echo "__ Updating OS..."
+# Tested on CentOS 8.2
 sudo yum -y -q update
 
 echo "__ HAProxy installation and configuration..."
@@ -47,7 +48,7 @@ frontend http
 backend servers-http" | sudo tee /etc/haproxy/haproxy.cfg
 
 sudo sed -i 's/server host-/#server host-/g' /etc/haproxy/haproxy.cfg
-hosts=$(echo "@@{APACHE_PHP.address}@@" | sed 's/^,//' | sed 's/,$//' | tr "," "\n")
+hosts=$(echo "@@{WebServer.address}@@" | sed 's/^,//' | sed 's/,$//' | tr "," "\n")
 port=80
 
 for host in $hosts; do
