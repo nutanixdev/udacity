@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 set -ex
 
-echo "__ Updating OS..."
-sudo yum -y -q update
-
+# Assuming CentOS/RedHat 8.2
 echo "__ Mysql installation..."
 # https://dev.mysql.com/doc/refman/8.0/en/linux-installation-yum-repo.html
-# sudo yum-config-manager --enable mysql80-community &&
+
 sudo yum install -y "http://repo.mysql.com/mysql80-community-release-el8.rpm" &&
   sudo yum module -y disable mysql &&
   sudo yum install -y mysql-community-server
 
+# database must be started for SQL configuration
 sudo systemctl start mysqld
+# database should start on OS boot
 sudo systemctl enable mysqld
-#&& sudo systemctl status mysqld.service
+# sudo systemctl status mysqld.service
 
 echo "__ Altering database root password..."
 

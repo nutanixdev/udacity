@@ -1,28 +1,11 @@
 #!/usr/bin/env bash
 set -ex
 
-echo "__ Updating OS..."
-# Tested on CentOS 8.2
-sudo yum -y -q update
+echo "__ Install Course 2, Lesson 4: Simple web application..."
 
-echo "__ Install httpd and php..."
-sudo yum install -y httpd
-sudo yum install -y php php-gd php-mbstring php-pdo php-mysqlnd
-
-echo "<IfModule mod_dir.c>
-        DirectoryIndex index.php index.html
-</IfModule>" | sudo tee /etc/httpd/conf.modules.d/dir.conf
-
-echo "<?php
-phpinfo();
-?>" | sudo tee /var/www/html/index.php
-
-sudo systemctl restart httpd &&
-  sudo systemctl enable httpd
-
-echo "__ Install simple web application..."
 sudo touch /var/www/html/index.php
 sudo chown @@{superuser.username}@@:@@{superuser.username}@@ /var/www/html/index.php
+
 cat > /var/www/html/index.php <<- "EOF"
 <html>
 <head>
