@@ -4,14 +4,13 @@ set -ex
 sudo touch /var/www/html/index.php
 sudo chown @@{superuser.username}@@:@@{superuser.username}@@ /var/www/html/index.php
 
-# create the app's main PHP page
 cat > /var/www/html/index.php <<- "EOF"
 <html>
 <head>
   <title>@@{calm_blueprint_name}@@</title>
 </head>
 <body>
-<h1>Hostname: @@{name}@@ at @@{address}@@, replica: @@{calm_array_index}@@</h1>
+ <h1>Hostname: @@{name}@@ at @@{address}@@, replica: @@{calm_array_index}@@</h1>
 <?php
 try {
   $dbh = new PDO('mysql:host=@@{MYSQL.address}@@;dbname=@@{DATABASE_NAME}@@', '@@{MYSQL_APP_USER}@@', '@@{MYSQL_PASSWORD}@@', array(
