@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -ex
 
-echo "__ Install Course 2, Lesson 4: Simple web application..."
-
 sudo touch /var/www/html/index.php
 sudo chown @@{superuser.username}@@:@@{superuser.username}@@ /var/www/html/index.php
 

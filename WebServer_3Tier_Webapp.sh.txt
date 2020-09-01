@@ -5,7 +5,7 @@ sudo touch /var/www/html/index.php
 sudo chown @@{superuser.username}@@:@@{superuser.username}@@ /var/www/html/index.php
 
 # create the app's main PHP page
-cat > /var/www/html/index.php <<-"EOF"
+cat > /var/www/html/index.php <<- "EOF"
 <html>
 <head>
   <title>@@{calm_blueprint_name}@@</title>
@@ -22,9 +22,9 @@ try {
   // ensure there is at least 1 row of data for the app to read
   $data = $dbh->query("INSERT INTO @@{DATABASE_TABLE}@@ (id, time, message) VALUES (NULL, CURRENT_TIMESTAMP, '@@{calm_username}@@')");
 
-  $data = $dbh->query('SELECT MAX(id) AS count FROM visitors')->fetchAll(PDO::FETCH_COLUMN);
+  $data = $dbh->query('SELECT MAX(id) AS count FROM @@{DATABASE_TABLE}@@')->fetchAll(PDO::FETCH_COLUMN);
   $count = $data[0]; //print_r($data);
-  $data = $dbh->query("SELECT time, message FROM visitors WHERE id = $count")->fetchAll(PDO::FETCH_ASSOC);
+  $data = $dbh->query("SELECT time, message FROM @@{DATABASE_TABLE}@@ WHERE id = $count")->fetchAll(PDO::FETCH_ASSOC);
   $time = $data[0]['time'];
   $message = $data[0]['message'];
 
