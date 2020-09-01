@@ -4,7 +4,7 @@ set -ex
 echo "__ HAProxy installation..."
 sudo yum install -y haproxy &&
   sudo systemctl enable haproxy
-haproxy --version
+haproxy -v
 
 echo "__ HAProxy configuration..."
 # http://cbonte.github.io/haproxy-dconv/1.8/configuration.html#4
