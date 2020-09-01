@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+sudo systemctl restart mysqld
+# sudo systemctl status mysqld.service
