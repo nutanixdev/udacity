@@ -17,3 +17,7 @@ Learn how to design, deploy, and maintain Hybrid Cloud infrastructure from one o
 ## History
 
 2020-03-31: Udacity and Nutanix jointly announced our partnership and the [Hybrid Cloud Engineer Nanodegree](https://www.nutanix.com/press-releases/2020/nutanix-partners-with-udacity-to-offer-hybrid-cloud-nanodegree-program) and [unveiled a scholarship program](https://www.udacity.com/scholarships/nutanix-hybrid-cloud-scholarship-program)!
+
+## FAQ
+
+(What is a Nanodegree)[https://udacity.zendesk.com/hc/en-us/articles/360015664831-What-is-a-Nanodegree-Program-] Program?
