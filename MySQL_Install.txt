@@ -8,14 +8,15 @@ echo "__ Mysql installation..."
 sudo yum install -y "http://repo.mysql.com/mysql80-community-release-el8.rpm" &&
   sudo yum module -y disable mysql &&
   sudo yum install -y mysql-community-server
+mysqld -v
 
-# database must be started for SQL configuration
+# database must be started for configuration
 sudo systemctl start mysqld
 # database should start on OS boot
 sudo systemctl enable mysqld
 # sudo systemctl status mysqld.service
 
-echo "__ Altering database root password..."
+echo -e "\n__ Altering database root password..."
 
 mysql --user=root --connect-expired-password \
   --password="$(sudo grep -oP 'temporary password(.*): \K(\S+)' /var/log/mysqld.log)" <<- EOF
@@ -26,7 +27,7 @@ ALTER user 'root'@'localhost' IDENTIFIED BY '@@{MYSQL_PASSWORD}@@';
 FLUSH PRIVILEGES;
 EOF
 
-echo "__ Creating database, table, and app user permissions..."
+echo -e "\n__ Creating database, table, and app user permissions..."
 
 mysql --user=root --password='@@{MYSQL_PASSWORD}@@' <<- "EOF"
 

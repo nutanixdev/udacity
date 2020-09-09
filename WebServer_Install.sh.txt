@@ -14,3 +14,4 @@ phpinfo();
 ?>" | sudo tee /var/www/html/index.php
 
 sudo systemctl enable httpd
+httpd -v
