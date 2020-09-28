@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -ex
+
+mysql --user=root --password='end-user-provided-password' < /tmp/mysqldump
