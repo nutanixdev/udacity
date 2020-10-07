@@ -1,0 +1,599 @@
+{
+    "status": {},
+    "contains_secrets": false,
+    "product_version": "3.0.6",
+    "spec": {
+        "description": "Simple BP for working with the Nutanix Calm DSL.",
+        "resources": {
+            "client_attrs": {
+                "None": {
+                    "Profile": {
+                        "Default": {
+                            "Action": {},
+                            "dsl_name": "Default"
+                        }
+                    },
+                    "Deployment": {
+                        "basiclinuxvm_deployment": {
+                            "Action": {},
+                            "dsl_name": "basiclinuxvm_deployment"
+                        }
+                    },
+                    "Substrate": {
+                        "BasicLinuxVm": {
+                            "Action": {},
+                            "AhvVm": {
+                                "vm-@@{calm_array_index}@@-@@{calm_time}@@": {
+                                    "dsl_name": "vmcalm_array_indexcalm_time"
+                                }
+                            },
+                            "dsl_name": "BasicLinuxVm"
+                        }
+                    },
+                    "Service": {
+                        "BasicLinux": {
+                            "Action": {},
+                            "dsl_name": "BasicLinux"
+                        }
+                    },
+                    "Package": {
+                        "CentosImage": {
+                            "Action": {},
+                            "dsl_name": "CentosImage"
+                        },
+                        "BasicLinuxPackage": {
+                            "Action": {},
+                            "dsl_name": "BasicLinuxPackage"
+                        }
+                    }
+                }
+            },
+            "service_definition_list": [{
+                "singleton": false,
+                "action_list": [{
+                        "description": "System action for creating an application",
+                        "type": "system",
+                        "critical": true,
+                        "runbook": {
+                            "task_definition_list": [{
+                                "target_any_local_reference": {
+                                    "kind": "app_service",
+                                    "name": "BasicLinux"
+                                },
+                                "retries": "0",
+                                "description": "",
+                                "child_tasks_local_reference_list": [],
+                                "name": "DAG_Task_for_Service_BasicLinux_action_create",
+                                "attrs": {
+                                    "edges": [],
+                                    "type": ""
+                                },
+                                "timeout_secs": "0",
+                                "type": "DAG",
+                                "variable_list": []
+                            }],
+                            "description": "",
+                            "name": "Runbook_for_Service_BasicLinux_action_create",
+                            "main_task_local_reference": {
+                                "kind": "app_task",
+                                "name": "DAG_Task_for_Service_BasicLinux_action_create"
+                            },
+                            "variable_list": []
+                        },
+                        "name": "action_create"
+                    },
+                    {
+                        "description": "System action for deleting an application. Deletes created VMs as well",
+                        "type": "system",
+                        "critical": true,
+                        "runbook": {
+                            "task_definition_list": [{
+                                "target_any_local_reference": {
+                                    "kind": "app_service",
+                                    "name": "BasicLinux"
+                                },
+                                "retries": "0",
+                                "description": "",
+                                "child_tasks_local_reference_list": [],
+                                "name": "DAG_Task_for_Service_BasicLinux_action_delete",
+                                "attrs": {
+                                    "edges": [],
+                                    "type": ""
+                                },
+                                "timeout_secs": "0",
+                                "type": "DAG",
+                                "variable_list": []
+                            }],
+                            "description": "",
+                            "name": "Runbook_for_Service_BasicLinux_action_delete",
+                            "main_task_local_reference": {
+                                "kind": "app_task",
+                                "name": "DAG_Task_for_Service_BasicLinux_action_delete"
+                            },
+                            "variable_list": []
+                        },
+                        "name": "action_delete"
+                    },
+                    {
+                        "description": "System action for starting an application",
+                        "type": "system",
+                        "critical": true,
+                        "runbook": {
+                            "task_definition_list": [{
+                                "target_any_local_reference": {
+                                    "kind": "app_service",
+                                    "name": "BasicLinux"
+                                },
+                                "retries": "0",
+                                "description": "",
+                                "child_tasks_local_reference_list": [],
+                                "name": "DAG_Task_for_Service_BasicLinux_action_start",
+                                "attrs": {
+                                    "edges": [],
+                                    "type": ""
+                                },
+                                "timeout_secs": "0",
+                                "type": "DAG",
+                                "variable_list": []
+                            }],
+                            "description": "",
+                            "name": "Runbook_for_Service_BasicLinux_action_start",
+                            "main_task_local_reference": {
+                                "kind": "app_task",
+                                "name": "DAG_Task_for_Service_BasicLinux_action_start"
+                            },
+                            "variable_list": []
+                        },
+                        "name": "action_start"
+                    },
+                    {
+                        "description": "System action for stopping an application",
+                        "type": "system",
+                        "critical": true,
+                        "runbook": {
+                            "task_definition_list": [{
+                                "target_any_local_reference": {
+                                    "kind": "app_service",
+                                    "name": "BasicLinux"
+                                },
+                                "retries": "0",
+                                "description": "",
+                                "child_tasks_local_reference_list": [],
+                                "name": "DAG_Task_for_Service_BasicLinux_action_stop",
+                                "attrs": {
+                                    "edges": [],
+                                    "type": ""
+                                },
+                                "timeout_secs": "0",
+                                "type": "DAG",
+                                "variable_list": []
+                            }],
+                            "description": "",
+                            "name": "Runbook_for_Service_BasicLinux_action_stop",
+                            "main_task_local_reference": {
+                                "kind": "app_task",
+                                "name": "DAG_Task_for_Service_BasicLinux_action_stop"
+                            },
+                            "variable_list": []
+                        },
+                        "name": "action_stop"
+                    },
+                    {
+                        "description": "System action for restarting an application",
+                        "type": "system",
+                        "critical": true,
+                        "runbook": {
+                            "task_definition_list": [{
+                                "target_any_local_reference": {
+                                    "kind": "app_service",
+                                    "name": "BasicLinux"
+                                },
+                                "retries": "0",
+                                "description": "",
+                                "child_tasks_local_reference_list": [],
+                                "name": "DAG_Task_for_Service_BasicLinux_action_restart",
+                                "attrs": {
+                                    "edges": [],
+                                    "type": ""
+                                },
+                                "timeout_secs": "0",
+                                "type": "DAG",
+                                "variable_list": []
+                            }],
+                            "description": "",
+                            "name": "Runbook_for_Service_BasicLinux_action_restart",
+                            "main_task_local_reference": {
+                                "kind": "app_task",
+                                "name": "DAG_Task_for_Service_BasicLinux_action_restart"
+                            },
+                            "variable_list": []
+                        },
+                        "name": "action_restart"
+                    },
+                    {
+                        "description": "System action for deleting an application. Does not delete created VMs",
+                        "type": "system",
+                        "critical": true,
+                        "runbook": {
+                            "task_definition_list": [{
+                                "target_any_local_reference": {
+                                    "kind": "app_service",
+                                    "name": "BasicLinux"
+                                },
+                                "retries": "0",
+                                "description": "",
+                                "child_tasks_local_reference_list": [],
+                                "name": "DAG_Task_for_Service_BasicLinux_action_soft_delete",
+                                "attrs": {
+                                    "edges": [],
+                                    "type": ""
+                                },
+                                "timeout_secs": "0",
+                                "type": "DAG",
+                                "variable_list": []
+                            }],
+                            "description": "",
+                            "name": "Runbook_for_Service_BasicLinux_action_soft_delete",
+                            "main_task_local_reference": {
+                                "kind": "app_task",
+                                "name": "DAG_Task_for_Service_BasicLinux_action_soft_delete"
+                            },
+                            "variable_list": []
+                        },
+                        "name": "action_soft_delete"
+                    }
+                ],
+                "depends_on_list": [],
+                "name": "BasicLinux",
+                "port_list": [],
+                "tier": "",
+                "variable_list": [],
+                "description": ""
+            }],
+            "substrate_definition_list": [{
+                "description": "",
+                "action_list": [],
+                "type": "AHV_VM",
+                "name": "BasicLinuxVm",
+                "readiness_probe": {
+                    "connection_type": "SSH",
+                    "retries": "5",
+                    "connection_protocol": "",
+                    "connection_port": 22,
+                    "address": "@@{platform.status.resources.nic_list[0].ip_endpoint_list[0].ip}@@",
+                    "delay_secs": "60",
+                    "disable_readiness_probe": false,
+                    "login_credential_local_reference": {
+                        "kind": "app_credential",
+                        "name": "teccadmin"
+                    }
+                },
+                "editables": {
+                    "create_spec": {
+                        "resources": {
+                            "nic_list": {},
+                            "serial_port_list": {}
+                        }
+                    }
+                },
+                "os_type": "Linux",
+                "create_spec": {
+                    "name": "vm-@@{calm_array_index}@@-@@{calm_time}@@",
+                    "resources": {
+                        "nic_list": [{
+                            "nic_type": "NORMAL_NIC",
+                            "ip_endpoint_list": [],
+                            "network_function_chain_reference": null,
+                            "network_function_nic_type": "INGRESS",
+                            "mac_address": "",
+                            "subnet_reference": {
+                                "kind": "subnet",
+                                "type": "",
+                                "name": "Primary",
+                                "uuid": "3b6477b0-2cdb-4a3b-9ee8-d93563738959"
+                            },
+                            "type": ""
+                        }],
+                        "serial_port_list": [],
+                        "guest_tools": null,
+                        "num_vcpus_per_socket": 1,
+                        "num_sockets": 1,
+                        "gpu_list": [],
+                        "memory_size_mib": 1024,
+                        "parent_reference": null,
+                        "hardware_clock_timezone": "",
+                        "guest_customization": {
+                            "cloud_init": {
+                                "meta_data": "",
+                                "type": "",
+                                "user_data": "#cloud-config\nusers:\n  - name: @@{teccadmin.username}@@\n    ssh-authorized-keys:\n      - @@{InstancePublicKey}@@\n      - @@{teccadmin.public_key}@@\n    sudo: ['ALL=(ALL) NOPASSWD:ALL']\n"
+                            },
+                            "type": "",
+                            "sysprep": null
+                        },
+                        "power_state": "ON",
+                        "type": "",
+                        "account_uuid": "24beaac4-5024-4d96-9b93-d9bbf520f645",
+                        "boot_config": {
+                            "boot_device": {
+                                "type": "",
+                                "disk_address": {
+                                    "type": "",
+                                    "device_index": 0,
+                                    "adapter_type": "SCSI"
+                                }
+                            },
+                            "type": "",
+                            "boot_type": "",
+                            "mac_address": ""
+                        },
+                        "disk_list": [{
+                            "data_source_reference": {
+                                "kind": "app_package",
+                                "type": "",
+                                "name": "CentosImage",
+                                "uuid": "288eb91b-989a-44f2-b836-9dcc78deca58"
+                            },
+                            "type": "",
+                            "disk_size_mib": 0,
+                            "volume_group_reference": null,
+                            "device_properties": {
+                                "type": "",
+                                "disk_address": {
+                                    "type": "",
+                                    "device_index": 0,
+                                    "adapter_type": "SCSI"
+                                },
+                                "device_type": "DISK"
+                            }
+                        }]
+                    },
+                    "availability_zone_reference": null,
+                    "backup_policy": null,
+                    "type": "",
+                    "cluster_reference": null,
+                    "categories": ""
+                },
+                "variable_list": []
+            }],
+            "credential_definition_list": [{
+                "username": "teccadmin",
+                "description": "",
+                "type": "KEY",
+                "secret": {
+                    "attrs": {
+                        "is_secret_modified": false,
+                        "secret_reference": {}
+                    }
+                },
+                "name": "teccadmin"
+            }],
+            "package_definition_list": [{
+                    "description": "",
+                    "action_list": [],
+                    "type": "CUSTOM",
+                    "service_local_reference_list": [{
+                        "kind": "app_service",
+                        "name": "BasicLinux"
+                    }],
+                    "name": "BasicLinuxPackage",
+                    "version": "",
+                    "options": {
+                        "install_runbook": {
+                            "task_definition_list": [{
+                                    "target_any_local_reference": {
+                                        "kind": "app_service",
+                                        "name": "BasicLinux"
+                                    },
+                                    "retries": "0",
+                                    "description": "",
+                                    "child_tasks_local_reference_list": [{
+                                            "kind": "app_task",
+                                            "name": "ConfigureBaseVM"
+                                        },
+                                        {
+                                            "kind": "app_task",
+                                            "name": "ConfigureFirewall"
+                                        }
+                                    ],
+                                    "name": "BasicLinuxPackage___install___dag",
+                                    "attrs": {
+                                        "edges": [{
+                                            "from_task_reference": {
+                                                "kind": "app_task",
+                                                "name": "ConfigureBaseVM"
+                                            },
+                                            "edge_type": "user_defined",
+                                            "type": "",
+                                            "to_task_reference": {
+                                                "kind": "app_task",
+                                                "name": "ConfigureFirewall"
+                                            }
+                                        }],
+                                        "type": ""
+                                    },
+                                    "timeout_secs": "0",
+                                    "type": "DAG",
+                                    "variable_list": []
+                                },
+                                {
+                                    "target_any_local_reference": {
+                                        "kind": "app_service",
+                                        "name": "BasicLinux"
+                                    },
+                                    "retries": "0",
+                                    "description": "",
+                                    "child_tasks_local_reference_list": [],
+                                    "name": "ConfigureBaseVM",
+                                    "attrs": {
+                                        "exit_status": [],
+                                        "script": "#!\/bin\/bash\n\n# update base OS packages\nsudo yum -y update\nsudo yum -y upgrade\n\n# install some useful packages\nsudo yum -y install vim git\n",
+                                        "script_type": "sh",
+                                        "type": "",
+                                        "command_line_args": "",
+                                        "login_credential_local_reference": {
+                                            "kind": "app_credential",
+                                            "name": "teccadmin"
+                                        }
+                                    },
+                                    "timeout_secs": "0",
+                                    "type": "EXEC",
+                                    "variable_list": []
+                                },
+                                {
+                                    "target_any_local_reference": {
+                                        "kind": "app_service",
+                                        "name": "BasicLinux"
+                                    },
+                                    "retries": "0",
+                                    "description": "",
+                                    "child_tasks_local_reference_list": [],
+                                    "name": "ConfigureFirewall",
+                                    "attrs": {
+                                        "exit_status": [],
+                                        "script": "#!\/bin\/bash\n\n# install and enable firewalld\nsudo yum -y install firewalld\nsudo systemctl enable firewalld\nsudo systemctl start firewalld\n",
+                                        "script_type": "sh",
+                                        "type": "",
+                                        "command_line_args": "",
+                                        "login_credential_local_reference": {
+                                            "kind": "app_credential",
+                                            "name": "teccadmin"
+                                        }
+                                    },
+                                    "timeout_secs": "0",
+                                    "type": "EXEC",
+                                    "variable_list": []
+                                }
+                            ],
+                            "description": "",
+                            "name": "BasicLinuxPackage___install___runbook",
+                            "main_task_local_reference": {
+                                "kind": "app_task",
+                                "name": "BasicLinuxPackage___install___dag"
+                            },
+                            "variable_list": []
+                        },
+                        "type": "",
+                        "uninstall_runbook": {
+                            "task_definition_list": [{
+                                "target_any_local_reference": {
+                                    "kind": "app_service",
+                                    "name": "BasicLinux"
+                                },
+                                "retries": "0",
+                                "description": "",
+                                "child_tasks_local_reference_list": [],
+                                "name": "DAG_Task_for_Package_BasicLinuxPackage_action_uninstall",
+                                "attrs": {
+                                    "edges": [],
+                                    "type": ""
+                                },
+                                "timeout_secs": "0",
+                                "type": "DAG",
+                                "variable_list": []
+                            }],
+                            "description": "",
+                            "name": "Runbook_for_Package_BasicLinuxPackage_action_uninstall",
+                            "main_task_local_reference": {
+                                "kind": "app_task",
+                                "name": "DAG_Task_for_Package_BasicLinuxPackage_action_uninstall"
+                            },
+                            "variable_list": []
+                        }
+                    },
+                    "variable_list": []
+                },
+                {
+                    "description": "https:\/\/cloud.centos.org\/centos\/7\/images\/",
+                    "action_list": [],
+                    "type": "SUBSTRATE_IMAGE",
+                    "service_local_reference_list": [],
+                    "name": "CentosImage",
+                    "version": "",
+                    "options": {
+                        "type": "",
+                        "name": "CentOS-7.8-2003",
+                        "resources": {
+                            "image_type": "DISK_IMAGE",
+                            "checksum": {
+                                "checksum_algorithm": "",
+                                "type": "",
+                                "checksum_value": ""
+                            },
+                            "source_uri": "https:\/\/cloud.centos.org\/centos\/7\/images\/CentOS-7-x86_64-GenericCloud-2003.qcow2",
+                            "version": {
+                                "product_version": "7.8",
+                                "type": "",
+                                "product_name": "CentOS"
+                            },
+                            "architecture": "X86_64",
+                            "type": ""
+                        },
+                        "description": ""
+                    },
+                    "variable_list": []
+                }
+            ],
+            "app_profile_list": [{
+                "deployment_create_list": [{
+                    "type": "GREENFIELD",
+                    "action_list": [],
+                    "name": "basiclinuxvm_deployment",
+                    "min_replicas": "1",
+                    "default_replicas": "1",
+                    "depends_on_list": [],
+                    "published_service_local_reference_list": [],
+                    "max_replicas": "1",
+                    "package_local_reference_list": [{
+                        "kind": "app_package",
+                        "name": "BasicLinuxPackage"
+                    }],
+                    "substrate_local_reference": {
+                        "kind": "app_substrate",
+                        "name": "BasicLinuxVm"
+                    },
+                    "options": {
+                        "type": ""
+                    },
+                    "variable_list": [],
+                    "description": ""
+                }],
+                "description": "",
+                "action_list": [],
+                "name": "Default",
+                "variable_list": [{
+                    "val_type": "STRING",
+                    "is_mandatory": false,
+                    "description": "",
+                    "data_type": "BASE",
+                    "type": "LOCAL",
+                    "name": "InstancePublicKey",
+                    "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCm+7N2tjmJw5jhPmD8MS6urZQJB42ABh73ffGQSJ0XUHgdEDfjUDFkLK0wyJCe0sF5QJnh07UQn0F0BUnBi+VwehPGeODh6S43OP5YS\/14L0fyntFI06B9lckx\/ygRNu82sHxXCX+6VVUFPOPC+sz6j1DQswKY9d4cEYnaMBGSzqRxrqAIf6aWIKTJTYKPFY0zaUZ6ow2iwS0Nlh5EqaXsEBWkqMmr7\/auP9GV\/adUgzFrGLJklYBdfH575SIK6\/PZL6wNT0jE9LmFlEm7dI01ZWPclBuV16FzRyrnzmWr\/ebY62A04vYBtR0vyfEfsW2ZgxgD6aAE6+ytj0v19y0elRtOaeTySN\/HlXh7owKWCHnlXNpTUiSDP8SQ8LRARkhQu3KEDL0ppGCrSF87oFkp1gPzf92U+UK3LaNMMjZXMOy0zLoLEdLtbQo6S8iHggDoX4NI4sWWxcX0mtadvjy\/nIOvskk9IXasQh0u0MT9ARQY5VXPluKDtEVdeow9UbvgJ1xxNkphUgsWjCiy+sjgapsuZvWqKM6TPT1i24XYaau+\/Fa0vhjLb8vCMWrrtkRwGt4re243NDYcYWTzVZUFuUK0w1wqt77KgjCCeyJdsZNwrh15v780Fjqpec3EGVA0xyNbF0jn\/tsnYy9jPh\/6Cv767EratI97JhUxoB4gXw== no-reply@acme.com",
+                    "label": "",
+                    "attrs": {
+                        "type": ""
+                    },
+                    "editables": {
+                        "value": true
+                    },
+                    "is_hidden": false
+                }]
+            }],
+            "published_service_definition_list": [],
+            "default_credential_local_reference": {
+                "kind": "app_credential",
+                "name": "teccadmin"
+            },
+            "type": "USER"
+        },
+        "name": "BasicLinuxVM-cr"
+    },
+    "api_version": "3.0",
+    "metadata": {
+        "last_update_time": "1601428495728975",
+        "kind": "blueprint",
+        "spec_version": 4,
+        "creation_time": "1597302209717229",
+        "name": "BasicLinuxVM-cr"
+    }
+}
