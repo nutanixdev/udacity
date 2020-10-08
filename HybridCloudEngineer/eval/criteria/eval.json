@@ -2,27 +2,44 @@
     "criteria": [{
             "description": "Calm Service Instances",
             "key": ".spec.resources.service_definition_list",
+            "type": "number",
+            "match": "exact",
             "expected": 1
         },
         {
             "description": "Calm Package Instances",
             "key": ".spec.resources.package_definition_list",
+            "type": "number",
+            "match": "exact",
             "expected": 2
         },
         {
             "description": "Calm Substrate Instances",
             "key": ".spec.resources.substrate_definition_list",
+            "type": "number",
+            "match": "exact",
             "expected": 1
         },
         {
             "description": "Calm Credential Instances",
             "key": ".spec.resources.credential_definition_list",
+            "type": "number",
+            "match": "exact",
             "expected": 1
         },
         {
             "description": "Number of Application Profiles",
             "key": ".spec.resources.app_profile_list",
+            "type": "number",
+            "match": "exact",
             "expected": 1
+        },
+        {
+            "description": "Application name",
+            "key": ".spec.name",
+            "type": "string",
+            "match": "contains",
+            "expected": "BasicLinuxVM"
         }
     ]
 }

@@ -8,6 +8,10 @@ PASS_PREFIX="[PASS]"
 FAIL_PREFIX="[FAIL]"
 LINE_BREAK="----------------------------------------"
 
+# set this to 1 if you want to bail out when a blueprint
+# can't be decompiled successfully
+VALID_BP_ONLY=0
+
 echo ""
 echo "$INFO_PREFIX Evaluation script started at `date`"
 echo ""
@@ -66,14 +70,17 @@ function process_json() {
 	fi
 	# verify the blueprint is valid
 	# at this point the blueprint directory and blueprint itself have been found in the user-specified locations
-	calm decompile bp --file "$BP_FULL" > /tmp/null 2>&1
-	COMPILE_RESULT=$?
-	if [ ! "$COMPILE_RESULT" == "0" ]
+	if [ "$VALID_BP_ONLY" == "1" ];
 	then
-		echo "$ERROR_PREFIX The specified blueprint cannot be decompiled.  Please ensure the blueprint contains valid JSON."
-		exit
-	else
-		echo "$OK_PREFIX Blueprint decompiled successfully.  Continuing."
+		calm decompile bp --file "$BP_FULL" > /tmp/null 2>&1
+		COMPILE_RESULT=$?
+		if [ ! "$COMPILE_RESULT" == "0" ]
+		then
+			echo "$ERROR_PREFIX The specified blueprint cannot be decompiled.  Please ensure the blueprint contains valid JSON."
+			exit
+		else
+			echo "$OK_PREFIX Blueprint decompiled successfully.  Continuing."
+		fi
 	fi
 
 	# read the evaluation criteria from the supplied evaluation file
@@ -87,16 +94,52 @@ function process_json() {
 	# compare each key's 'expected' value to that key's value in the student's JSON blueprint
 	for row in $(echo "${JSON_CRITERIA}" | jq -r '.criteria[] | @base64')
 	do
+		TYPE=`echo ${row} | base64 -d | jq -r '.type'`
+		MATCH=`echo ${row} | base64 -d | jq -r '.match'`
 		KEY=`echo ${row} | base64 -d | jq -r '.key'`
 		DESCRIPTION=`echo ${row} | base64 -d | jq -r '.description'`
 		EXPECTED_VALUE=`echo ${row} | base64 -d | jq -r '.expected'`
-		KEY_VALUE=`cat "$BP_FULL" | jq -r "$KEY | length"`
-		# do the comparison
-		if [ "$EXPECTED_VALUE" == "$KEY_VALUE" ]
+		# compare the expected vs evaluated values, based on the expected data type
+		if [ "$TYPE" == "number" ];
 		then
-			echo "$PASS_PREFIX ${DESCRIPTION} | Expected ${EXPECTED_VALUE} | Found ${KEY_VALUE}"
+			KEY_VALUE=`cat "$BP_FULL" | jq -r "$KEY | length"`
 		else
-			echo "$FAIL_PREFIX ${DESCRIPTION} | Expected ${EXPECTED_VALUE} | Found ${KEY_VALUE}"
+			KEY_VALUE=`cat "$BP_FULL" | jq -r "$KEY"`
+		fi
+		# do the comparison but compare based on the "match" setting in the evaluation file
+		# string values can be "exact" or "contains"
+		# "match" is ignored for number types
+		if [ "$TYPE" == "string" ];
+		then
+			if [ "$MATCH" == "exact" ];
+			then
+				if [ "$EXPECTED_VALUE" == "$KEY_VALUE" ];
+				then
+					RESULT=1
+				else
+					RESULT=0
+				fi
+			else
+				if [[ "$KEY_VALUE" == *"$EXPECTED_VALUE"* ]];
+				then
+					RESULT=1
+				else
+					RESULT=0
+				fi
+			fi
+		else
+			if [ "$EXPECTED_VALUE" == "$KEY_VALUE" ]
+			then
+				RESULT=1
+			else
+				RESULT=0
+			fi
+		fi
+		if [ "$RESULT" == "1" ]
+		then
+			echo "$PASS_PREFIX $TYPE | $MATCH | ${DESCRIPTION} | Expected ${EXPECTED_VALUE} | Found ${KEY_VALUE}"
+		else
+			echo "$FAIL_PREFIX $TYPE | $MATCH | ${DESCRIPTION} | Expected ${EXPECTED_VALUE} | Found ${KEY_VALUE}"
 		fi
 	done
 
