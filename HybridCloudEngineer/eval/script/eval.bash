@@ -1,22 +1,34 @@
 #!/bin/bash
 
+# colours
+RED="\e[31m"
+GREEN="\e[32m"
+BLUE="\e[34m"
+NC="\e[39m"
+
 # set some script-wide variables
-ERROR_PREFIX="[ERROR]"
-OK_PREFIX="[OK]"
-INFO_PREFIX="[INFO]"
-PASS_PREFIX="[PASS]"
-FAIL_PREFIX="[FAIL]"
+ERROR_PREFIX="$RED[ERROR]$NC"
+OK_PREFIX="$BLUE[OK]$NC"
+INFO_PREFIX="$BLUE[INFO]$NC"
+PASS_PREFIX="$GREEN[PASS]$NC"
+FAIL_PREFIX="$RED[FAIL]$NC"
 LINE_BREAK="----------------------------------------"
 
 # set this to 1 if you want to bail out when a blueprint
 # can't be decompiled successfully
 VALID_BP_ONLY=0
 
-echo ""
-echo "$INFO_PREFIX Evaluation script started at `date`"
-echo ""
+# set this to 1 to show extended debug info
+# for example, if a specific evaluation fails, dump the value that was found
+# this can make the output look "messy" but will help diagnose what the
+# student did vs what was expected
+DEBUG=0
 
-echo "$INFO_PREFIX Checking environment."
+echo -e ""
+echo -e "$INFO_PREFIX Evaluation script started at `date`"
+echo -e ""
+
+echo -e "$INFO_PREFIX Checking environment."
 
 # checking required binaries are found and are executable
 COMMANDS=( "calm" "jq" )
@@ -26,47 +38,47 @@ do
 	# check that each binary exists
 	if ! command -v $i &> /dev/null
 	then
-		echo "[ERROR] '$i' command could not be found.  Please ensure the $i command exists and is executable before running this script."
+		echo -e "$ERROR_PREFIX '$i' command could not be found.  Please ensure the $i command exists and is executable before running this script."
 		exit
 	else
-		echo "$OK_PREFIX '$i' command found in `which $i`.  Continuing."
+		echo -e "$INFO_PREFIX '$i' command found in `which $i`.  Continuing."
 	fi
 done
 
-echo "$INFO_PREFIX Environment OK."
+echo -e "$INFO_PREFIX Environment OK."
 
 # function used to display script usage help, when required
 function show_help {
-	echo ""
-	echo "Usage: eval.bash [ARGS]"
-	echo ""
-	echo "Args:"
-	echo "  -h  Show this help and exit."
-	echo "  -d  Location of user blueprints"
-	echo "  -b  Blueprint name to evaluate"
-	echo "  -c  Evaluation criteria file to use for comparison"
-	echo ""
-	echo "Note:"
-	echo "  -b  value can be \"all\", to batch process all JSON blueprints in the specified directory"
-	echo ""
-	echo "Examples:"
-	echo "  eval.bash -c eval.json -d ~/blueprints -b blueprint1"
-	echo "  eval.bash -c eval.json -d . -b all"
-	echo ""
+	echo -e ""
+	echo -e "Usage: eval.bash [ARGS]"
+	echo -e ""
+	echo -e "Args:"
+	echo -e "  -h  Show this help and exit."
+	echo -e "  -d  Location of user blueprints"
+	echo -e "  -b  Blueprint name to evaluate"
+	echo -e "  -c  Evaluation criteria file to use for comparison"
+	echo -e ""
+	echo -e "Note:"
+	echo -e "  -b  value can be \"all\", to batch process all JSON blueprints in the specified directory"
+	echo -e ""
+	echo -e "Examples:"
+	echo -e "  eval.bash -c eval.json -d ~/blueprints -b blueprint1"
+	echo -e "  eval.bash -c eval.json -d . -b all"
+	echo -e ""
 	exit
 }
 function process_json() {
-	echo $LINE_BREAK
+	echo -e $LINE_BREAK
 	# with the blueprint directory found and a blueprint specified, concatenate to make future work easier
 	BP_FULL="$BLUEPRINT_DIRECTORY/$1"
 	# verify the specified blueprint exists
 	if [ ! -f "$BP_FULL" ]
 	then
-		echo "$ERROR_PREFIX $1 not found.  Please specify a valid blueprint by using the -d and -b arguments."
+		echo -e "$ERROR_PREFIX $1 not found.  Please specify a valid blueprint by using the -d and -b arguments."
 		show_help
 		exit
 	else
-		echo "$OK_PREFIX $1 found.  Continuing."
+		echo -e "$INFO_PREFIX $1 found.  Continuing."
 	fi
 	# verify the blueprint is valid
 	# at this point the blueprint directory and blueprint itself have been found in the user-specified locations
@@ -76,29 +88,29 @@ function process_json() {
 		COMPILE_RESULT=$?
 		if [ ! "$COMPILE_RESULT" == "0" ]
 		then
-			echo "$ERROR_PREFIX The specified blueprint cannot be decompiled.  Please ensure the blueprint contains valid JSON."
+			echo -e "$ERROR_PREFIX The specified blueprint cannot be decompiled.  Please ensure the blueprint contains valid JSON."
 			exit
 		else
-			echo "$OK_PREFIX Blueprint decompiled successfully.  Continuing."
+			echo -e "$INFO_PREFIX Blueprint decompiled successfully.  Continuing."
 		fi
 	fi
 
 	# read the evaluation criteria from the supplied evaluation file
 	JSON_CRITERIA="`cat ${CRITERIA_FILE}`"
 
-	echo ""
-	echo "$INFO_PREFIX Starting evaluation of $BP_FULL."
-	echo ""
+	echo -e ""
+	echo -e "$INFO_PREFIX Starting evaluation of $BP_FULL."
+	echo -e ""
 
 	# go over each of the criteria keys in the evaluation file
 	# compare each key's 'expected' value to that key's value in the student's JSON blueprint
-	for row in $(echo "${JSON_CRITERIA}" | jq -r '.criteria[] | @base64')
+	for row in $(echo -e "${JSON_CRITERIA}" | jq -r '.criteria[] | @base64')
 	do
-		TYPE=`echo ${row} | base64 -d | jq -r '.type'`
-		MATCH=`echo ${row} | base64 -d | jq -r '.match'`
-		KEY=`echo ${row} | base64 -d | jq -r '.key'`
-		DESCRIPTION=`echo ${row} | base64 -d | jq -r '.description'`
-		EXPECTED_VALUE=`echo ${row} | base64 -d | jq -r '.expected'`
+		TYPE=`echo -e ${row} | base64 -d | jq -r '.type'`
+		MATCH=`echo -e ${row} | base64 -d | jq -r '.match'`
+		KEY=`echo -e ${row} | base64 -d | jq -r '.key'`
+		DESCRIPTION=`echo -e ${row} | base64 -d | jq -r '.description'`
+		EXPECTED_VALUE=`echo -e ${row} | base64 -d | jq -r '.expected'`
 		# compare the expected vs evaluated values, based on the expected data type
 		if [ "$TYPE" == "number" ];
 		then
@@ -137,19 +149,29 @@ function process_json() {
 		fi
 		if [ "$RESULT" == "1" ]
 		then
-			echo "$PASS_PREFIX $TYPE | $MATCH | ${DESCRIPTION} | Expected ${EXPECTED_VALUE} | Found ${KEY_VALUE}"
+			if [ "$DEBUG" == "1" ];
+			then
+				echo -e "$PASS_PREFIX $TYPE | $MATCH | ${DESCRIPTION} | Expected ${EXPECTED_VALUE} | Found ${KEY_VALUE}"
+			else
+				echo -e "$PASS_PREFIX $TYPE | $MATCH | ${DESCRIPTION} | Expected ${EXPECTED_VALUE}"
+			fi
 		else
-			echo "$FAIL_PREFIX $TYPE | $MATCH | ${DESCRIPTION} | Expected ${EXPECTED_VALUE} | Found ${KEY_VALUE}"
+			if [ "$DEBUG" == "1" ];
+			then
+				echo -e "$FAIL_PREFIX $TYPE | $MATCH | ${DESCRIPTION} | Expected ${EXPECTED_VALUE} | Found ${KEY_VALUE}"
+			else
+				echo -e "$FAIL_PREFIX $TYPE | $MATCH | ${DESCRIPTION} | Expected ${EXPECTED_VALUE}"
+			fi
 		fi
 	done
 
-	echo ""
-	echo "$INFO_PREFIX Evaluation of $BP_FULL completed.  Please see results above."
-	echo ""
+	echo -e ""
+	echo -e "$INFO_PREFIX Evaluation of $BP_FULL completed.  Please see results above."
+	echo -e ""
 }
 
 # verify the required command-line parameters i.e. the BP directory and the BP we want to work with
-echo "$INFO_PREFIX Verifying command-line arguments."
+echo -e "$INFO_PREFIX Verifying command-line arguments."
 while getopts ":b:d:c:h:" opt; do
 	case $opt in
 		b) export BLUEPRINT="$OPTARG"
@@ -160,7 +182,7 @@ while getopts ":b:d:c:h:" opt; do
 		;;
 		h) show_help
 		;;
-		\?) echo "$ERROR_PREFIX Unrecognised command-line argument specified: -$OPTARG" >&2
+		\?) echo -e "$ERROR_PREFIX Unrecognised command-line argument specified: -$OPTARG" >&2
 		;;
 	esac
 done
@@ -168,21 +190,21 @@ done
 # verify the blueprint directory exists
 if [ ! -d "$BLUEPRINT_DIRECTORY" ]
 then
-	echo "$ERROR_PREFIX Specified blueprint directory not found or not specified using the -d argument."
+	echo -e "$ERROR_PREFIX Specified blueprint directory not found or not specified using the -d argument."
 	show_help
 	exit
 else
-	echo "$OK_PREFIX Blueprint directory found.  Continuing."
+	echo -e "$INFO_PREFIX Blueprint directory found.  Continuing."
 fi
 
 # verify a blueprint has been specified using the -b parameter as a command-line argument
 if [ -z "$BLUEPRINT" ]
 then
-        echo "$ERROR_PREFIX No blueprint specified.  Please specify a blueprint by name by using the -b argument."
+        echo -e "$ERROR_PREFIX No blueprint specified.  Please specify a blueprint by name by using the -b argument."
 	show_help
 	exit
 else
-        echo "$OK_PREFIX Blueprint name specified.  Continuing."
+        echo -e "$INFO_PREFIX Blueprint name specified.  Continuing."
 fi
 
 # verify an evaluation criteria file has been specified using the -c parameter as a command-line argument
@@ -190,14 +212,14 @@ if [ ! -z "$CRITERIA_FILE" ]
 then
 	if [ ! -f "$CRITERIA_FILE" ]
 	then
-		echo "$ERROR_PREFIX Evaluation criteria file not found.  Please specify a valid evaluation criteria file by using the -c argument."
+		echo -e "$ERROR_PREFIX Evaluation criteria file not found.  Please specify a valid evaluation criteria file by using the -c argument."
 	        show_help
 	        exit
 	else
-        	echo "$OK_PREFIX Evaluation criteria file specified and found.  Continuing."
+        	echo -e "$INFO_PREFIX Evaluation criteria file specified and found.  Continuing."
 	fi
 else
-	echo "$ERROR_PREFIX Evaluation criteria file not specified.  Please specify an evaluation criteria file by using the -c argument."
+	echo -e "$ERROR_PREFIX Evaluation criteria file not specified.  Please specify an evaluation criteria file by using the -c argument."
 	show_help
         exit
 fi
@@ -205,8 +227,8 @@ fi
 # check to see if the user has indicated they want to parse all blueprints in the specified blueprint directory
 if [ "$BLUEPRINT" == "all" ]
 then
-	echo "$INFO_PREFIX All JSON blueprints in $BLUEPRINT_DIRECTORY will be processed."
-	echo ""
+	echo -e "$INFO_PREFIX All JSON blueprints in $BLUEPRINT_DIRECTORY will be processed."
+	echo -e ""
 	# go over all JSON files in the specified blueprint directory
 	for BP_JSON_FILE in *.json
 	do
@@ -217,18 +239,18 @@ then
 		fi
 	done
 else
-	echo "$INFO_PREFIX Only $BLUEPRINT in $BLUEPRINT_DIRECTORY will be processed."
-	echo ""
+	echo -e "$INFO_PREFIX Only $BLUEPRINT in $BLUEPRINT_DIRECTORY will be processed."
+	echo -e ""
 	process_json $BLUEPRINT
 fi
 
-echo $LINE_BREAK
+echo -e $LINE_BREAK
 
 # cleanup
-echo "$INFO_PREFIX Cleaning up."
+echo -e "$INFO_PREFIX Cleaning up."
 
-echo "$OK_PREFIX Evaluation completed."
-echo ""
+echo -e "$INFO_PREFIX Evaluation completed."
+echo -e ""
 
-echo "$INFO_PREFIX Evaluation script finished at `date`"
-echo ""
+echo -e "$INFO_PREFIX Evaluation script finished at `date`"
+echo -e ""

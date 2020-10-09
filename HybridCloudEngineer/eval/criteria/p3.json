@@ -49,6 +49,13 @@
             "expected": "ami-02f147dfb8be58a10"
         },
         {
+            "description": "AWS Instance Type",
+            "key": ".spec.resources.substrate_definition_list[].create_spec.resources.instance_type",
+            "type": "string",
+            "match": "exact",
+            "expected": "t2.micro"
+        },
+        {
             "description": "Apache Web Server Name",
             "key": ".spec.resources.substrate_definition_list[].create_spec.name",
             "type": "string",
