@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -ex
+
+echo "__ Install httpd and php..."
+sudo yum install -y httpd
+sudo yum install -y php php-gd php-mbstring php-pdo php-mysqlnd
+
+echo "<IfModule mod_dir.c>
+        DirectoryIndex index.php index.html
+</IfModule>" | sudo tee /etc/httpd/conf.modules.d/dir.conf
+
+echo "<?php
+phpinfo();
+?>" | sudo tee /var/www/html/index.php
+
+sudo systemctl enable httpd
+
+# temporarily disable SELinux to prevent httpd to MySQL authentication issues
+# this is for testing only and should not be done in production environments
+echo "__ Temporarily disable SELinux..."
+sudo setenforce 0

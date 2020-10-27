@@ -1,0 +1,137 @@
+{
+    "criteria": [{
+            "description": "Entity Lists",
+            "type": "entity_lists",
+            "lists": [{
+                    "key_desc": "Calm Service Instances",
+                    "key": "spec.resources.service_definition_list",
+                    "expected": 3
+                },
+                {
+                    "key_desc": "Calm Package Instances",
+                    "key": "spec.resources.package_definition_list",
+                    "expected": 4
+                },
+                {
+                    "key_desc": "Calm Substrate Instances",
+                    "key": "spec.resources.substrate_definition_list",
+                    "expected": 3
+                },
+                {
+                    "key_desc": "Calm Credential Instances",
+                    "key": "spec.resources.credential_definition_list",
+                    "expected": 2
+                },
+                {
+                    "key_desc": "Calm App Profile Instances",
+                    "key": "spec.resources.app_profile_list",
+                    "expected": 1
+                }
+            ]
+        },
+        {
+            "description": "CentOS Image Name",
+            "key": "spec.resources.package_definition_list",
+            "type": "source_uri",
+            "match": "contains",
+            "expected": "cloud.centos.org"
+        },
+        {
+            "description": "AHV: VM Names",
+            "key": "spec.resources.substrate_definition_list",
+            "type": "ahv_server_names",
+            "match": "equals",
+            "expected": [
+                "www@@{calm_array_index}@@",
+                "mysql-@@{calm_time}@@",
+                "haproxy-@@{calm_time}@@"
+            ]
+        },
+        {
+            "description": "Web Server Max Replicas",
+            "key": "spec.resources.app_definition_list",
+            "type": "web_max_replicas",
+            "match": "equals",
+            "names": [
+                "webserverahv",
+                "webserveraws"
+            ],
+            "expected": 4
+        },
+        {
+            "description": "Web Server Min Replicas",
+            "key": "spec.resources.app_definition_list",
+            "type": "web_min_replicas",
+            "match": "equals",
+            "names": [
+                "webserverahv",
+                "webserveraws"
+            ],
+            "expected": 2
+        },
+        {
+            "description": "VM Cloud-Init Data",
+            "key": "spec.resources.service_definition_list",
+            "type": "cloud_init",
+            "match": "contains",
+            "expected": {
+                "ahv_data": "#cloud-config\nusers:",
+                "aws_data": "omit: security-group of VPC for SSH"
+            }
+        },
+        {
+            "description": "Application Credentials",
+            "key": "spec.resources.credential_definition_list",
+            "type": "credentials",
+            "expected": {
+                "types": [
+                    "key"
+                ],
+                "usernames": [
+                    "teccadmin",
+                    "teccdba"
+                ]
+            }
+        },
+        {
+            "description": "Course 2 VM Specs",
+            "key": "spec.resources.substrate_definition_list",
+            "type": "c2_sizing",
+            "vm_sizes": [{
+                    "specs": {
+                        "spec_desc": "Web Server",
+                        "name": "www@@{calm_array_index}@@",
+                        "vm_spec": {
+                            "num_sockets": 1,
+                            "num_vcpus_per_socket": 1,
+                            "memory_size_mib": 1024
+                        }
+
+                    }
+                },
+                {
+                    "specs": {
+                        "spec_desc": "MySQL Database Server",
+                        "name": "mysql-@@{calm_time}@@",
+                        "vm_spec": {
+                            "num_sockets": 1,
+                            "num_vcpus_per_socket": 1,
+                            "memory_size_mib": 1024
+                        }
+                    }
+                },
+                {
+                    "specs": {
+                        "spec_desc": "HAProxy Server",
+                        "name": "haproxy-@@{calm_time}@@",
+                        "vm_spec": {
+                            "num_sockets": 1,
+                            "num_vcpus_per_socket": 1,
+                            "memory_size_mib": 1024
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+echo "Generic uninstall script, goodbye!"

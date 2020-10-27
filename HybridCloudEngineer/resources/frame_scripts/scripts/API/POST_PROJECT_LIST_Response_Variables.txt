@@ -1,0 +1,12 @@
+Variable:   ACCOUNT_UUID 
+Path:   $.entities[0].status.resources.account_reference_list.uuid
+
+Variable:   ACCOUNT_NAME     
+Path:   $.entities[0].status.resources.account_reference_list.name
+
+Variable:   PROJECT_UUID    
+Path:   $.entities[0].metadata.project_reference.uuid
+
+Variable:   PROJECT_NAME    
+Path:   $.entities[0].metadata.project_reference.name
+

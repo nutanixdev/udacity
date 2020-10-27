@@ -1,0 +1,153 @@
+{
+    "criteria": [{
+            "description": "Entity Lists",
+            "type": "entity_lists",
+            "lists": [{
+                    "key_desc": "Calm Service Instances",
+                    "key": "spec.resources.service_definition_list",
+                    "expected": 4
+                },
+                {
+                    "key_desc": "Calm Package Instances",
+                    "key": "spec.resources.package_definition_list",
+                    "expected": 8
+                },
+                {
+                    "key_desc": "Calm Substrate Instances",
+                    "key": "spec.resources.substrate_definition_list",
+                    "expected": 8
+                },
+                {
+                    "key_desc": "Calm Credential Instances",
+                    "key": "spec.resources.credential_definition_list",
+                    "expected": 2
+                },
+                {
+                    "key_desc": "Calm App Profile Instances",
+                    "key": "spec.resources.app_profile_list",
+                    "expected": 2
+                }
+            ]
+        },
+        {
+            "description": "CentOS Image Name",
+            "key": "spec.resources.package_definition_list",
+            "type": "source_uri",
+            "match": "contains",
+            "expected": "cloud.centos.org"
+        },
+        {
+            "description": "AWS AMI ID",
+            "key": "spec.resources.substrate_definition_list",
+            "type": "image_id",
+            "match": "in",
+            "expected": [
+                "ami-02f147dfb8be58a10",
+                "ami-0157b1e4eefd91fd7"
+            ]
+        },
+        {
+            "description": "AWS Instance Type",
+            "key": "spec.resources.substrate_definition_list",
+            "type": "instance_type",
+            "match": "in",
+            "expected": [
+                "t2.micro"
+            ]
+        },
+        {
+            "description": "AHV: VM Names",
+            "key": "spec.resources.substrate_definition_list",
+            "type": "ahv_server_names",
+            "match": "equals",
+            "expected": [
+                "www@@{calm_array_index}@@-@@{calm_time}@@",
+                "haproxy-@@{calm_array_index}@@-@@{calm_time}@@"
+            ]
+        },
+        {
+            "description": "AWS: VM Names",
+            "key": "spec.resources.substrate_definition_list",
+            "type": "aws_server_names",
+            "match": "equals",
+            "expected": [
+                "www@@{calm_array_index}@@-@@{calm_time}@@",
+                "mysql-@@{calm_array_index}@@-@@{calm_time}@@"
+            ]
+        },
+        {
+            "description": "Web Server Max Replicas",
+            "key": "spec.resources.app_definition_list",
+            "type": "web_max_replicas",
+            "match": "equals",
+            "names": [
+                "webserverahv",
+                "webserveraws"
+            ],
+            "expected": 4
+        },
+        {
+            "description": "Web Server Min Replicas",
+            "key": "spec.resources.app_definition_list",
+            "type": "web_min_replicas",
+            "match": "equals",
+            "names": [
+                "webserverahv",
+                "webserveraws"
+            ],
+            "expected": 2
+        },
+        {
+            "description": "VM Cloud-Init Data",
+            "key": "spec.resources.service_definition_list",
+            "type": "cloud_init",
+            "match": "contains",
+            "expected": {
+                "ahv_data": "#cloud-config\nusers:",
+                "aws_data": "omit: security-group of VPC for SSH"
+            }
+        },
+        {
+            "description": "Application Credentials",
+            "key": "spec.resources.credential_definition_list",
+            "type": "credentials",
+            "expected": {
+                "types": [
+                    "key"
+                ],
+                "usernames": [
+                    "teccadmin",
+                    "teccdba"
+                ]
+            }
+        },
+        {
+            "description": "VM Specs",
+            "key": "spec.resources.substrate_definition_list",
+            "type": "c3_sizing",
+            "vm_sizes": [{
+                    "size": "small",
+                    "count": 2,
+                    "specs": {
+                        "spec_desc": "Web Server",
+                        "name": "www@@{calm_array_index}@@-@@{calm_time}@@",
+                        "num_sockets": 1,
+                        "num_vcpus_per_socket": 1,
+                        "memory_size_mib": 1024
+                    }
+                },
+                {
+                    "size": "medium",
+                    "count": 2,
+                    "specs": {
+                        "spec_desc": "MySQL Database Server",
+                        "name": "mysql-@@{calm_array_index}@@-@@{calm_time}@@",
+                        "num_sockets": 1,
+                        "num_vcpus_per_socket": 1,
+                        "memory_size_mib": 1024
+                    }
+                }
+            ]
+        }
+    ]
+}

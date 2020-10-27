@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+set -ex
+
+sudo touch /var/www/html/index.php
+sudo chown @@{superuser.username}@@:@@{superuser.username}@@ /var/www/html/index.php
+
+cat > /var/www/html/index.php <<- "EOF"
+<html>
+<head>
+  <title>@@{calm_blueprint_name}@@</title>
+</head>
+<body>
+ <h1>Hostname: @@{name}@@ at @@{address}@@, replica: @@{calm_array_index}@@</h1>
+<?php
+try {
+  $dbh = new PDO('mysql:host=@@{MySQL.address}@@;dbname=@@{DATABASE_NAME}@@', '@@{MYSQL_APP_USER}@@', '@@{MYSQL_PASSWORD}@@', array(
+    PDO::ATTR_PERSISTENT => true,
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+  ));
+
+  // ensure there is at least 1 row of data for the app to read
+  $data = $dbh->query("INSERT INTO @@{DATABASE_TABLE}@@ (id, time, message) VALUES (NULL, CURRENT_TIMESTAMP, '@@{calm_username}@@')");
+
+  $data = $dbh->query('SELECT MAX(id) AS count FROM @@{DATABASE_TABLE}@@')->fetchAll(PDO::FETCH_COLUMN);
+  $count = $data[0]; //print_r($data);
+  $data = $dbh->query("SELECT time, message FROM @@{DATABASE_TABLE}@@ WHERE id = $count")->fetchAll(PDO::FETCH_ASSOC);
+  $time = $data[0]['time'];
+  $message = $data[0]['message'];
+
+  echo "<p>Database records: $count</p>\n";
+  echo "<p>Last maintainer: $message, on: $time</p>\n";
+  echo "<h3>Web docroot: $_SERVER['DOCUMENT_ROOT'], file: $_SERVER['SCRIPT_NAME']</h3>\n";
+
+  $dbh = null;
+}
+catch (PDOException $e) {
+  print "Error!: " . $e->getMessage() . "<br/>";
+  print phpinfo();
+  die();
+}
+?></body>
+</html>
+EOF

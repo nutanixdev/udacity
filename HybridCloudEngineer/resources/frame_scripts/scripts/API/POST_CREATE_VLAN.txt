@@ -1,0 +1,24 @@
+{
+  "spec": {
+    "description": "VLAN-@@{VLAN_ID}@@",
+    "resources": {
+      "subnet_type": "VLAN",
+      "vswitch_name": "br0",
+      "vlan_id": @@{calm_int(VLAN_ID)}@@
+    },
+    "cluster_reference": {
+      "kind": "cluster",
+      "name": "@@{CLUSTER_NAME}@@",
+      "uuid": "@@{CLUSTER_UUID}@@"
+    },
+    "name": "VLAN-@@{VLAN_ID}@@"
+  },
+  "api_version": "3.1.0",
+  "metadata": {
+    "kind": "subnet",
+    "spec_version": 0,
+    "spec_hash": "string",
+    "should_force_translate": true,
+    "name": "VLAN-@@{VLAN_ID}@@"
+  }
+}

@@ -1,0 +1,8 @@
+Variable: CLUSTER_UUID
+Path: $.entities[0].status.cluster_reference.uuid
+Variable: CLUSTER_NAME
+Path: $.entities[0].status.cluster_reference.name
+Variable: DEF_SUB_UUID
+Path: $.entities[0].metadata.uuid
+Variable: DEF_SUB_NAME
+Path: $.entities[0].status.name

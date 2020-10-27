@@ -1,0 +1,14 @@
+#cloud-config
+# https://aws.amazon.com/premiumsupport/knowledge-center/ec2-user-account-cloud-init-user-data/
+# omit: security-group of VPC for SSH?
+# omit: SSH-keypair in ec2 region, skips creation: ec2-user
+cloud_final_modules:
+  - [users-groups,always]
+users:
+  - name: @@{superuser.username}@@
+    groups: [ wheel ]
+    sudo: [ "ALL=(ALL) NOPASSWD:ALL" ]
+    shell: /bin/bash
+    ssh-authorized-keys:
+      - @@{superuser.public_key}@@
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC8ZzG4f1TfEZ2YRgDcPSQjb+fxbtRS4m1dr/EcqwqIxiV6nU9Ft3PrTqC8qFkhBjOvSJJ3GeEMCZnvEK9Iq8F+R0G3pa29fZeRA8Ur3PM4d2kb2ZhEYLMmnhKJoSTJw4c5PxaZ4ZXKUH+yATQUsLrwoYsHEC6bAvKl0+yFspQYehaiEEO17o3KQUq/izU7Agi4vETAuR7/dlKwzj1sG8fikaf351gmQhIHd+nXxIY9yTA3CpvfeKTJ77aHN0Cg+HwXg9X+c0+P/6zMfo87oru25qnPX5ITa2TfposQWp1xASGrrJX5B6rNYuQQKzVo5OO7VfFEKDsDlzGAkDVlD797xVoq+/HN6G5gsi82jujBb1X9kyCLGFNhXsseGcqYelBMWmHKHTp69/vnWcjT1dCB4OWEQr5ARcxYc5zNXV4N2CVYwH4iF70ztt4Dd7/4gmvXWmzyuc0j7gd+QHz0BwxJTGZu+MPPXu8xAYtcCSAh/SQFzL7xhnbsIrDj2mXBwOi36vxPQ8APRstr0dtEYivwyPyVb7lzR2SGmQNlHxB/F/xdiHszqD+/c4DGZqW4xj+I6ICu/19lh3gi2rLvrGF86EPTQ3hQKtpv6/t2O+UXONnc+Ayc5dKh6baC6IbwGQnT0tLDPTXM5+o3M2a0KefdqmzL6/gekpATS+scqb6tPQ== mark.lavi@nutanix.com-2018-05-21-passphraseless

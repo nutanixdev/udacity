@@ -1,59 +1,95 @@
 {
     "criteria": [{
             "description": "Calm Service Instances",
-            "key": ".spec.resources.service_definition_list",
-            "type": "number",
+            "key": "spec.resources.service_definition_list",
+            "type": "instances",
             "match": "exact",
-            "expected": 1
+            "expected": 4
         },
         {
             "description": "Calm Package Instances",
-            "key": ".spec.resources.package_definition_list",
-            "type": "number",
+            "key": "spec.resources.package_definition_list",
+            "type": "instances",
+            "match": "exact",
+            "expected": 9
+        },
+        {
+            "description": "Calm Substrate Instances",
+            "key": "spec.resources.substrate_definition_list",
+            "type": "instances",
+            "match": "exact",
+            "expected": 8
+        },
+        {
+            "description": "Calm Credential Instances",
+            "key": "spec.resources.credential_definition_list",
+            "type": "instances",
             "match": "exact",
             "expected": 2
         },
         {
-            "description": "Calm Substrate Instances",
-            "key": ".spec.resources.substrate_definition_list",
-            "type": "number",
+            "description": "Calm Application Profiles Instances",
+            "key": "spec.resources.app_profile_list",
+            "type": "instances",
             "match": "exact",
-            "expected": 1
+            "expected": 2
         },
         {
-            "description": "Calm Credential Instances",
-            "key": ".spec.resources.credential_definition_list",
-            "type": "number",
+            "description": "Deployment Create Lists",
+            "key": "deployment_create_list",
+            "type": "list2",
+            "sub_type": "instances",
             "match": "exact",
-            "expected": 1
-        },
-        {
-            "description": "Number of Application Profiles",
-            "key": ".spec.resources.app_profile_list",
-            "type": "number",
-            "match": "exact",
-            "expected": 1
+            "expected": 2
         },
         {
             "description": "CentOS 8 Cloud Image URL",
-            "key": ".spec.resources.package_definition_list[].options.resources.source_uri",
-            "type": "string",
+            "key": "source_uri",
+            "type": "list2",
+            "sub_type": "string",
             "match": "contains",
             "expected": "cloud.centos.org"
         },
         {
             "description": "AWS AMI ID",
-            "key": ".spec.resources.substrate_definition_list[].create_spec.resources.image_id",
-            "type": "string",
+            "key": "image_id",
+            "type": "list2",
+            "sub_type": "string",
             "match": "contains",
             "expected": "ami-02f147dfb8be58a10"
         },
         {
             "description": "AWS Instance Type",
-            "key": ".spec.resources.substrate_definition_list[].create_spec.resources.instance_type",
-            "type": "string",
+            "key": "instance_type",
+            "type": "list2",
+            "sub_type": "string",
             "match": "contains",
             "expected": "t2.micro"
+        },
+        {
+            "description": "Minimum Instance Replicas",
+            "key": "min_replicas",
+            "type": "list2",
+            "sub_type": "number",
+            "match": "exact",
+            "expected": 1
+        },
+        {
+            "description": "App Profile Evaluations",
+            "type": "list3",
+            "key": "app_profile_list",
+            "sub_keys": [{
+                    "description": "Minimum Instance Replicas",
+                    "key": "min_replicas",
+                    "expected": 1
+                },
+                {
+                    "description": "Maximum Instance Replicas",
+                    "key": "max_replicas",
+                    "expected": 4
+                }
+            ],
+            "match": "exact"
         },
         {
             "description": "Minimum Instance Replicas",

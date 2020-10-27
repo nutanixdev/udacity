@@ -1,0 +1,39 @@
+
+{
+  "spec": {
+    "name": "default",
+    "resources": {
+      "account_reference_list": [
+        {
+          "kind": "account",
+          "name": "@@{ACCOUNT_NAME}@@",
+          "uuid": "@@{ACCOUNT_UUID}@@"
+        }
+      ],
+      "subnet_reference_list": [
+        {
+          "kind": "subnet",
+          "name": "@@{DEF_SUB_NAME}@@",
+          "uuid": "@@{DEF_SUB_UUID}@@"
+        },
+        {
+          "kind": "subnet",
+          "name": "@@{VLAN_NAME}@@",
+          "uuid": "@@{VLAN_UUID}@@"
+        }
+      ],
+      "external_network_list": []
+    }
+  },
+  "api_version": "3.1",
+  "metadata": {
+    "kind": "project",
+    "uuid": "@@{PROJECT_UUID}@@",
+    "spec_version": 0,
+    "project_reference": {
+      "kind": "project",
+      "name": "@@{PROJECT_NAME}@@",
+      "uuid": "@@{PROJECT_UUID}@@"
+    }
+  }
+}

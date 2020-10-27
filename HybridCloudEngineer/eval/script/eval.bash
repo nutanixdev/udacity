@@ -121,8 +121,9 @@ function process_json() {
 		# do the comparison but compare based on the "match" setting in the evaluation file
 		# string values can be "exact" or "contains"
 		# "match" is ignored for number types
-		if [ "$TYPE" == "string" ];
-		then
+
+		# if [ "$TYPE" == "string" ];
+		# then
 			if [ "$MATCH" == "exact" ];
 			then
 				if [ "$EXPECTED_VALUE" == "$KEY_VALUE" ];
@@ -139,14 +140,14 @@ function process_json() {
 					RESULT=0
 				fi
 			fi
-		else
-			if [ "$EXPECTED_VALUE" == "$KEY_VALUE" ]
-			then
-				RESULT=1
-			else
-				RESULT=0
-			fi
-		fi
+		# else
+		#	if [ "$EXPECTED_VALUE" == "$KEY_VALUE" ]
+		#	then
+		#		RESULT=1
+		#	else
+		#		RESULT=0
+		#	fi
+		# fi
 		if [ "$RESULT" == "1" ]
 		then
 			if [ "$DEBUG" == "1" ];
