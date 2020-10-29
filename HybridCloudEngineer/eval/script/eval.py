@@ -328,8 +328,18 @@ def process_json(bp: str):
                                                             + f'{size["specs"]["spec_desc"]} num vCPUS Per Socket',
                                                             f'Expected {size["specs"]["vm_spec"]["num_vcpus_per_socket"]}',
                                                             f'Found {substrate["create_spec"]["resources"]["num_vcpus_per_socket"]}')
+                                            else:
+                                                show_result(False, f'{eval_key["description"]} - '
+                                                            + f'{size["specs"]["spec_desc"]} num vCPUS Per Socket',
+                                                            f'Expected {size["specs"]["vm_spec"]["num_vcpus_per_socket"]}',
+                                                            f'Found {substrate["create_spec"]["resources"]["num_vcpus_per_socket"]}')
                                             if substrate['create_spec']['resources']['num_sockets'] == size['specs']['vm_spec']['num_sockets']:
                                                 show_result(True, f'{eval_key["description"]} - '
+                                                            + f'{size["specs"]["spec_desc"]} Num Sockets',
+                                                            f'Expected {size["specs"]["vm_spec"]["num_sockets"]}',
+                                                            f'Found {substrate["create_spec"]["resources"]["num_sockets"]}')
+                                            else:
+                                                show_result(False, f'{eval_key["description"]} - '
                                                             + f'{size["specs"]["spec_desc"]} Num Sockets',
                                                             f'Expected {size["specs"]["vm_spec"]["num_sockets"]}',
                                                             f'Found {substrate["create_spec"]["resources"]["num_sockets"]}')
@@ -338,25 +348,70 @@ def process_json(bp: str):
                                                             + f'{size["specs"]["spec_desc"]} Memory MiB',
                                                             f'Expected {size["specs"]["vm_spec"]["memory_size_mib"]}',
                                                             f'Found {substrate["create_spec"]["resources"]["memory_size_mib"]}')
+                                            else:
+                                                show_result(False, f'{eval_key["description"]} - '
+                                                            + f'{size["specs"]["spec_desc"]} Memory MiB',
+                                                            f'Expected {size["specs"]["vm_spec"]["memory_size_mib"]}',
+                                                            f'Found {substrate["create_spec"]["resources"]["memory_size_mib"]}')
                             # course 3 vm sizing and specs
                             elif eval_key['type'] == 'c3_sizing':
                                 for size in eval_key['vm_sizes']:
+
+                                    # vm count per profile
                                     vms = ([x for x in
-                                            bp_json["spec"]["resources"]
-                                            ["substrate_definition_list"]
+                                            bp_dot[eval_key['key']]
                                             if size['size'] in x["name"].lower()
                                             and "num_sockets" in
                                             x["create_spec"]["resources"]])
                                     if len(vms) == size['count']:
-                                        show_result(True, f'{eval_key["description"]} ({size["size"]})',
+                                        show_result(True, f'{eval_key["description"]} - {size["specs"]["spec_desc"]} ({size["size"]})',
                                                     f'Expected {size["count"]}',
                                                     f'Found {len(vms)}')
                                     else:
-                                        show_result(False, f'{eval_key["description"]} ({size["size"]})',
+                                        show_result(False, f'{eval_key["description"]} - {size["specs"]["spec_desc"]} ({size["size"]})',
                                                     f'Expected {size["count"]}',
                                                     f'Found {len(vms)}')
 
+                                    # credential verification/security standards
+                                    cred_checks = ([x for x in
+                                                   bp_dot[eval_key['key']]
+                                                   if x["readiness_probe"]['login_credential_local_reference']['name'].lower() == size["specs"]["credential_name"]
+                                                   and size["specs"]["partial_name"] in x["create_spec"]["name"].lower()])
+                                    if len(cred_checks) > 0:
+                                        show_result(True, f'{size["specs"]["spec_desc"]} Security Standards',
+                                                    f'Expected credential named {size["specs"]["credential_name"]}',
+                                                    'Found matches')
 
+                                '''
+                                for substrate in bp_dot[eval_key['key']]:
+                                    if 'mysql' in substrate['name'].lower():
+                                        if str(substrate['readiness_probe']['login_credential_local_reference']['name']).lower() == 'teccdba':
+                                            show_result(True, f'{eval_key["description"]} (MySQL Credential Name)',
+                                                        f'Expected "teccdba"',
+                                                        f'Found "{substrate["readiness_probe"]["login_credential_local_reference"]["name"]}"')
+                                        else:
+                                            show_result(False, f'{eval_key["description"]} (MySQL Credential Name)',
+                                                        f'Expected "teccdba"',
+                                                        f'Found "{substrate["readiness_probe"]["login_credential_local_reference"]["name"]}"')
+                                    elif 'web' in substrate['name'].lower():
+                                        if str(substrate['readiness_probe']['login_credential_local_reference']['name']).lower() == 'teccadmin':
+                                            show_result(True, f'{eval_key["description"]} (Web Server Credential Name)',
+                                                        f'Expected "teccadmin"',
+                                                        f'Found "{substrate["readiness_probe"]["login_credential_local_reference"]["name"]}"')
+                                        else:
+                                            show_result(False, f'{eval_key["description"]} (Web Server Credential Name)',
+                                                        f'Expected "teccadmin"',
+                                                        f'Found "{substrate["readiness_probe"]["login_credential_local_reference"]["name"]}"')
+                                    elif 'haproxy' in substrate['name'].lower():
+                                        if str(substrate['readiness_probe']['login_credential_local_reference']['name']).lower() == 'teccadmin':
+                                            show_result(True, f'{eval_key["description"]} (Load Balancer Credential Name)',
+                                                        f'Expected "teccadmin"',
+                                                        f'Found "{substrate["readiness_probe"]["login_credential_local_reference"]["name"]}"')
+                                        else:
+                                            show_result(False, f'{eval_key["description"]} (Load Balancer Credential Name)',
+                                                        f'Expected "teccadmin"',
+                                                        f'Found "{substrate["readiness_probe"]["login_credential_local_reference"]["name"]}"')
+                                '''
                     except Exception as e:
                         print(e)
 

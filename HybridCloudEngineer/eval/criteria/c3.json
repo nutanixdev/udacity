@@ -10,7 +10,7 @@
                 {
                     "key_desc": "Calm Package Instances",
                     "key": "spec.resources.package_definition_list",
-                    "expected": 8
+                    "expected": 9
                 },
                 {
                     "key_desc": "Calm Substrate Instances",
@@ -61,8 +61,8 @@
             "type": "ahv_server_names",
             "match": "equals",
             "expected": [
-                "www@@{calm_array_index}@@-@@{calm_time}@@",
-                "haproxy-@@{calm_array_index}@@-@@{calm_time}@@"
+                "www@@{calm_array_index}@@",
+                "haproxy-@@{calm_time}@@"
             ]
         },
         {
@@ -71,8 +71,8 @@
             "type": "aws_server_names",
             "match": "equals",
             "expected": [
-                "www@@{calm_array_index}@@-@@{calm_time}@@",
-                "mysql-@@{calm_array_index}@@-@@{calm_time}@@"
+                "www@@{calm_array_index}@@",
+                "aws-mysql-@@{calm_array_index}@@"
             ]
         },
         {
@@ -130,21 +130,64 @@
                     "count": 2,
                     "specs": {
                         "spec_desc": "Web Server",
-                        "name": "www@@{calm_array_index}@@-@@{calm_time}@@",
+                        "name": "www@@{calm_array_index}@@",
+                        "partial_name": "www",
                         "num_sockets": 1,
                         "num_vcpus_per_socket": 1,
-                        "memory_size_mib": 1024
+                        "memory_size_mib": 1024,
+                        "credential_name": "teccadmin"
                     }
                 },
                 {
                     "size": "medium",
                     "count": 2,
                     "specs": {
-                        "spec_desc": "MySQL Database Server",
-                        "name": "mysql-@@{calm_array_index}@@-@@{calm_time}@@",
+                        "spec_desc": "Web Server",
+                        "name": "www@@{calm_array_index}@@",
+                        "partial_name": "www",
+                        "num_sockets": 2,
+                        "num_vcpus_per_socket": 2,
+                        "memory_size_mib": 1024,
+                        "credential_name": "teccadmin"
+                    }
+                },
+                {
+                    "size": "small",
+                    "count": 2,
+                    "specs": {
+                        "spec_desc": "Load Balancer",
+                        "name": "HAProxy-@@{calm_time}@@",
+                        "partial_name": "haproxy",
                         "num_sockets": 1,
                         "num_vcpus_per_socket": 1,
-                        "memory_size_mib": 1024
+                        "memory_size_mib": 1024,
+                        "credential_name": "teccadmin"
+                    }
+                },
+                {
+                    "size": "medium",
+                    "count": 2,
+                    "specs": {
+                        "spec_desc": "Load Balancer",
+                        "name": "www@@{calm_array_index}@@",
+                        "partial_name": "haproxy",
+                        "num_sockets": 2,
+                        "num_vcpus_per_socket": 2,
+                        "memory_size_mib": 1024,
+                        "credential_name": "teccadmin"
+                    }
+                },
+                {
+                    "size": "small",
+                    "count": 2,
+                    "specs": {
+                        "spec_desc": "MySQL Database Server",
+                        "name": "aws-mysql-@@{calm_array_index}@@",
+                        "partial_name": "mysql",
+                        "num_sockets": 1,
+                        "num_vcpus_per_socket": 1,
+                        "memory_size_mib": 1024,
+                        "credential_name": "teccdba"
                     }
                 }
             ]
