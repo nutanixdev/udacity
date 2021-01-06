@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-set -ex
-
-mysqldump --all-databases --user=root --password='@@{MYSQL_PASSWORD}@@'

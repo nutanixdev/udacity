@@ -1,6 +1,0 @@
-#cloud-config
-users:
-  - name: @@{superuser.username}@@
-    ssh-authorized-keys:
-      - @@{superuser.public_key}@@
-    sudo: ['ALL=(ALL) NOPASSWD:ALL']
