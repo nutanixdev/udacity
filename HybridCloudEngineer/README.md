@@ -1,6 +1,6 @@
 # Hybrid Cloud Engineer Nanodegree
 
-Welcome! Students probably want to get directly to the [materials for course 2 project](course/2/project/)
+Welcome! Students probably want to get directly to the materials for [course 2 project](course/2/project/) and [course 3 project](course/3/project/).
 
 ## Overview
 
