@@ -20,4 +20,4 @@ Learn how to design, deploy, and maintain Hybrid Cloud infrastructure from one o
 
 ## FAQ
 
-(What is a Nanodegree)[https://udacity.zendesk.com/hc/en-us/articles/360015664831-What-is-a-Nanodegree-Program-] Program?
+[What is a Nanodegree](https://udacity.zendesk.com/hc/en-us/articles/360015664831-What-is-a-Nanodegree-Program-) Program?
