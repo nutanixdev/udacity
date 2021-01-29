@@ -1,6 +1,6 @@
 # Evaluation Script for Udacity HCE Student Blueprints
 
-Please use this script to evaluate student blueprints.
+Please use this script to evaluate student blueprints for course 2 and 3 projects and see the Nutanix.DEV blog article [Evaluations the DevOps Way](https://www.nutanix.dev/2020/12/15/evaluations-the-devops-way/).
 
 ## Evaluation App Deployment Instructions
 
